@@ -1,6 +1,7 @@
 from PIL import Image
 import time
-
+from transformers import pipeline
+nlp = None
 
 def init():
     """
@@ -8,6 +9,8 @@ def init():
     model needs have been created, and if not then you should create/fetch them.
     """
     # Placeholder init code. Replace the sleep with check for model files required etc...
+    global nlp 
+    nlp = pipeline("ner")
     time.sleep(1)
 
 
@@ -29,14 +32,44 @@ def predict(prediction_input):
     Example code for opening the image using PIL:
     image = Image.open('/app/images/'+image_file_name)
     """
-
+    global nlp
     text_input = prediction_input  # If text model
-    image = Image.open('/app/images/' + prediction_input)  # If image model
+    # image = Image.open('/app/images/' + prediction_input)  # If image model
+
+    only_person = False
+    result_dict = {}
+    for entity in ['I-PER', 'I-LOC', 'I-ORG', 'I-MISC']:
+        result_dict[entity] = ''
+    
+    result = nlp(text_input)
+    res = result[0]
+    s = text_input[res['start']: res['end']]
+    curr_index = res['index']
+    curr_entity = res['entity']
+
+    i = 1
+    while(True):
+        while i < len(result) and curr_index+1 == result[i]['index'] and curr_entity == result[i]['entity']:
+            
+            s += text_input[result[i]['start']: result[i]['end']]
+            curr_index = result[i]['index']
+            i += 1
+        if not only_person or (only_person and curr_entity == 'I-PER'):
+            # print(s, " ", curr_entity)
+            result_dict[curr_entity] += ' ' + s
+        if i == len(result):
+            break
+        s = text_input[result[i]['start']: result[i]['end']]
+        curr_index = result[i]['index']
+        curr_entity = result[i]['entity']
+        i+=1
 
     return {
-        'classes': ['isGreen', 'isRed'],  # List every class in the classifier
+        'classes': ['PER', 'LOC', 'ORG', 'MISC'],  # List every class in the classifier
         'result': {  # For results, use the class names above with the result value
-            'isGreen': 0,
-            'isRed': 1
+            'PER': result_dict['I-PER'],
+            'LOC': result_dict['I-LOC'],
+            'ORG': result_dict['I-ORG'],
+            'MISC': result_dict['I-MISC']
         }
     }

@@ -33,7 +33,8 @@ def attempt_predict():
     try:
         predict_status = 'In Progress...'
         from model.model import predict
-        predict_result = predict('1.png')
+        # predict_result = predict('1.png')
+        predict_result = predict('Jack went to New York and had pizza.')
         predict_status = 'Successful'
         predict_error = ''
     except:
