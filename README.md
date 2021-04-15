@@ -1,3 +1,7 @@
+# Named-entity Recognition
+The code detects named-entities using tranformers in Hugging Face.
+In the `perdiction()` function in `model/model.py` file, set `only_person` to `True` to detect only names of people.
+
 # Model Design Template
 
 This template was created to speed up the model design and development process.
