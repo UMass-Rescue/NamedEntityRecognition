@@ -1,29 +1,16 @@
-# Named-entity Recognition
-The code detects named-entities using tranformers in Hugging Face.
-In the `perdiction()` function in `model/model.py` file, set `only_person` to `True` to detect only names of people.
+# Named-entity recognition & detecting names of people
 
-# Model Design Template
+This model is designed accoding to the template in [UniversalModelTemaplate](https://github.com/UMass-Rescue/UniversalModelTemplate). The model passes all the test cases in this application, and should work in the context of the server.
 
-This template was created to speed up the model design and development process.
-If the model passes the test cases in this application, then it will also work in
-the context of the server.
+In the model directory, the code in `model.py` detects named-entities, i.e. names of people, locations and organizations using tranformers in [Hugging Face](https://huggingface.co/transformers/usage.html).  In the `perdiction()` function in `model/model.py` file, set `only_person` to `True` to detect only names of people.
 
-## Getting Started
-In the model directory, fill out the code in `model.py` and `config.py` according to
-the directions in each file. Then, add the requirements for your project into the
-`requirements.py` file in the model directory. You may add any supporting files or
-folders that your model needs under the model directory.
-
-**Important: All code that your model uses or references *MUST* be contained in the
-model directory.**
+`config.py` has some metadata about the ML model, e.g. input type, model name, and tags. 
+The requirements are added to `requirements.py` file in the model directory. 
 
 
 ## Debugging your Model
 
-If you need extra information on how your model is performing, a built-in debugging server is provided
-which will connect to the Docker container the model is running in and return error messages.
-
-If you would like to use this, in the root directory of the project, run the command 
+In the root directory of the project, run the command 
 `docker-compose build debug` and then `docker-compose up debug`. Open a web browser and navigate to
 [http://localhost:4650]('http://localhost:4650').
 
